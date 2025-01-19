@@ -1,0 +1,25 @@
+version: '3'
+services:
+  oracle:
+    image: "container-registry.oracle.com/database/free:latest"
+    ports:
+      - 1623:1521
+    environment:
+      - "ORACLE_PWD=oracle"
+    networks:
+      - api
+
+  employee-management:
+    depends_on:
+      oracle:
+        condition: service_healthy
+    image: "employee-management"
+    ports:
+      - 8080:8080
+    networks:
+      - api
+
+
+networks:
+  api:
+    driver: bridge
